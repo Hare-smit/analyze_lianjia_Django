@@ -8,7 +8,7 @@ from scrapy import signals
 # useful for handling different item types with a single interface
 from scrapy.http import HtmlResponse
 from selenium_open import create_chrmoe_driver
-from selen_req import SeleniumRequest
+from lianjia.selen_req import SeleniumRequest
 
 
 class LianjiaSpiderMiddleware:
