@@ -1,0 +1,50 @@
+{% extends "test.html" %}
+
+
+
+{% block template %}
+<style type="text/css">
+    div{
+    line-height:30px;
+    font-size: 16px;
+}
+    .jian{
+        line-height: 80px;
+    }
+</style>
+
+        <div class="container">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+
+            <div class="bs-example" data-example-id="default-media">
+                <div class="media">
+                  <div class="media-left">
+                    <a href="#">
+                      <img class="media-object img-thumbnail" src="https://image1.ljcdn.com/110000-inspection/pc1_Q8GLg2YhV_1.jpg.296x216.jpg" data-holder-rendered="true" >
+                    </a>
+                  </div>
+                  <div class="media-body ">
+                    <h2 class="media-heading jian" >Media heading</h2>
+                      <h3 class="pull-right" style="color: red" >Donec lacinia congue
+                          <div><p class="text-right" style="color: #888888 ;font-weight: 5 ;line-height: 40px">felis in faucibus.</p></div>
+                      </h3>
+                      <div>Cras sit amet nibh libero  -  in gravida nulla</div>
+
+                      <div>Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at</div>
+                      tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla.
+                  </div>
+                </div>
+                <hr>
+                  </div>
+                </div>
+              </div>
+    </div>
+
+
+    <div  style="text-align: center" class="container">
+        <ul class="pagination">
+        {{ page_string }}
+        </ul>
+    </div>
+{% endblock %}

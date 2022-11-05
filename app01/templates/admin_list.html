@@ -1,0 +1,56 @@
+{% extends "test.html" %}
+
+{% block template %}
+    <div class="container">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <a class="btn btn-primary" href={% url "adminadd" %}>{{ title }}</a>
+                <div style="float: right;width: 300px;">
+                    <form method="get">
+                        <div class="input-group">
+                            <input type="search" name="q" class="form-control" placeholder="Search for..."
+                                   value="{{ search_data }}">
+                            <span class="input-group-btn">
+                            <button class="btn btn-default" type="submit">
+                                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                            </button>
+                          </span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="panel-body">
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>管理员</th>
+                        <th>密码</th>
+                        <th>重置密码</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for obj in querset %}
+                        <tr>
+                            <th>{{ obj.id }}</th>
+                            <td>{{ obj.admin_user }}</td>
+                            <td>********</td>
+                            <td><a href="/admin/{{ obj.id }}/reset/">重置密码</a></td>
+                            <td>
+                                <a class="btn btn-primary btn-xs" href="#">编辑</a>
+                                <a class="btn btn-danger btn-xs" href="/admin/delete/?nid={{ obj.id }}">删除</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div  style="text-align: center" class="container">
+        <ul class="pagination">
+        {{ page_string }}
+        </ul>
+    </div>
+{% endblock %}
