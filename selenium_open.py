@@ -9,7 +9,7 @@ def create_chrmoe_driver(*,headless = False):
     options.add_experimental_option("excludeSwitches",['enable-automation'])
     options.add_experimental_option("useAutomationExtension",False)
     driver = webdriver.Chrome(options=options)
-    with open('./stealth.min.js') as f:
+    with open('/Users/huanghanhua/PycharmProjects/analyze_lianjia_Django/lianjia/stealth.min.js') as f:
         js = f.read()
     driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
         "source": js
@@ -29,3 +29,6 @@ def add_cookies(driver,cookie_file):
             if cookie_dict['secure']:
                 driver.add_cookie(cookie_dict)
 
+driver = create_chrmoe_driver()
+driver.get(url="https://gz.lianjia.com/ershoufang/")
+driver.close()

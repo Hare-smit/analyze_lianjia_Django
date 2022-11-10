@@ -16,6 +16,7 @@ class Housing(models.Model):
     fitment = models.CharField(max_length=32,verbose_name="装修格局")
     plce = models.CharField(max_length=32,verbose_name="地区")
     master_map = models.CharField(max_length=255,verbose_name="图片")
+    house_id = models.CharField(max_length = 32, verbose_name = "id号",default="1")
 
 
 class Housing_update(models.Model):
@@ -32,4 +33,6 @@ class Housing_update(models.Model):
     fitment = models.CharField(max_length=32, verbose_name="装修格局")
     plce = models.CharField(max_length=32, verbose_name="地区")
     master_map = models.CharField(max_length=255, verbose_name="图片")
+    house_id = models.CharField(max_length = 32, verbose_name = "id号",default="1")
+
 

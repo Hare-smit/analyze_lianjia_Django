@@ -42,7 +42,7 @@ LOG_LEVEL = "WARNING"
 # Configure a delay for requests for the same website (default: 0)
 # See https://docs.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-#DOWNLOAD_DELAY = 3
+DOWNLOAD_DELAY = 3
 # The download delay setting will honor only one of:
 #CONCURRENT_REQUESTS_PER_DOMAIN = 16
 #CONCURRENT_REQUESTS_PER_IP = 16
@@ -72,7 +72,7 @@ LOG_LEVEL = "WARNING"
 # }
 
 DOWNLOADER_MIDDLEWARES = {
-   'lianjia.middlewares.LianjiaDownloaderMiddleware': 543,
+   'lianjia.middlewares.LianjiaDownloaderMiddleware': 99,
    'lianjia.middlewares.my_useragent':2,
    'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,  #设置原来的为None否则无效
 }

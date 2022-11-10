@@ -1,10 +1,11 @@
 import random
+import re
 import time
 
 import scrapy
 from scrapy import Request,Selector
 from scrapy.http import HtmlResponse
-
+from lianjia.selen_req import SeleniumRequest
 from lianjia.items import LianjiaItem
 
 class LianjiaScrapySpider(scrapy.Spider):
@@ -32,7 +33,9 @@ class LianjiaScrapySpider(scrapy.Spider):
             href_dis = href[1].split('/')[2]
             lianjia['area'] = href[0]
             url = response.urljoin(href_dis+'/')
-            print(url)
+            check = sel.css('#content > div.leftContent > ul > li')
+            if check ==[]:
+                continue
             yield Request(url=url,callback=self.page_house,cb_kwargs= dict(lianjia,main_url=response.url+href_dis+'/',page_on=1))  #获取到当前区域的链接，进入区域继续获取
 
     def page_house(self,response:HtmlResponse,**kwargs):
@@ -40,14 +43,20 @@ class LianjiaScrapySpider(scrapy.Spider):
         main_url = kwargs['main_url']
         sel = Selector(response)
         All = sel.css('#content > div.leftContent > ul > li')
-        plce = sel.xpath('//*[@id="content"]/div[1]/div[7]/div[1]/a[1]/text()').extract_first()
-        print(plce)
+        for nu in range(7,10):
+            plce = sel.xpath(f'//*[@id="content"]/div[1]/div[{nu}]/div[1]/a[1]/text()').extract_first()
+            if plce != None:
+                break
+        # print(plce)
         lianjia['plce'] = plce.replace('房产网','')
 #'//div[@comp-module="page"]/a[@class="on"]/text()'
         #page_on = sel.xpath('//div[@comp-module="page"]/a[@class="on"]/text()').extract_first()
         for chunk in All:
             try:
                 lianjia['title'] = chunk.xpath('.//div[@class="title"]/a/text()').extract_first()
+                re_ = re.compile("ershoufang/(?P<id>.*?).html",re.S)
+                id = chunk.xpath('.//div[@class="title"]/a/@href').extract_first()
+                lianjia["house_id"] = re_.search(id).group("id")
                 try:
                     community,position = chunk.xpath('.//div[@class="positionInfo"]/a/text()').extract()
                 except:
@@ -84,7 +93,7 @@ class LianjiaScrapySpider(scrapy.Spider):
             kwargs['page_on'] += 1
             print(f'爬取{lianjia["area"]}第{kwargs["page_on"]}页')
             next_url = main_url+f'pg{kwargs["page_on"]}/'
-            time.sleep(random.randint(1,2))
+            # time.sleep(random.randint(1,2))
             yield Request(url=next_url,callback=self.page_house,cb_kwargs= dict(lianjia))
 
 
