@@ -5,7 +5,7 @@ from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
 from app01.static.part.bootstrap import BootStrapModelForm
 from app01.static.part.encrypt_md5 import md5
-
+from funtinos.encrypt import RSA_encrypt,RSA_decrypt
 
 #
 # class User_run(BootStrapModelForm):
@@ -72,11 +72,11 @@ class Admin_add(BootStrapModelForm):
 
     def clean_password(self):
         pwd=self.cleaned_data.get("password")
-        return md5(pwd)
+        return pwd
 
     def clean_confirm_password(self):
         pwd = self.cleaned_data.get("password")
-        confirm = md5(self.cleaned_data.get("confirm_password"))
+        confirm = self.cleaned_data.get("confirm_password")
         if confirm != pwd:
             raise ValidationError("密码不一致")
         return confirm
@@ -92,7 +92,7 @@ class Admin_check(BootStrapModelForm):
         }
 
     def clean_password(self):
-        now_pwd=md5(self.cleaned_data.get("password"))
+        now_pwd=self.cleaned_data.get("password")
         exists = models.Admin.objects.filter(id=self.instance.pk,password=now_pwd).exists()
         if exists:
             raise ValidationError("不能重置最近使用的密码")
@@ -101,7 +101,7 @@ class Admin_check(BootStrapModelForm):
 
     def clean_confirm_password(self):
         pwd = self.cleaned_data.get("password")
-        confirm = md5(self.cleaned_data.get("confirm_password"))
+        confirm = self.cleaned_data.get("confirm_password")
         if confirm != pwd:
             raise ValidationError("密码不一致")
         return confirm
@@ -110,7 +110,7 @@ class Login(BootStrapModelForm):
     code = forms.CharField(
         label="验证码",
         widget=forms.TextInput,
-        required=True
+        required=True,
     )
     class Meta:
         model = models.Admin
@@ -121,7 +121,8 @@ class Login(BootStrapModelForm):
 
     def clean_password(self):
         pwd = self.cleaned_data.get("password")
-        return md5(pwd)
+        print(pwd)
+        return RSA_decrypt(pwd)
 
 
 

@@ -1,3 +1,5 @@
+from Crypto.Cipher import PKCS1_v1_5
+from Crypto.PublicKey import RSA
 from app01 import models
 from django.shortcuts import render,redirect,HttpResponse
 from app01.static.part.form import Login
@@ -8,29 +10,30 @@ from io import BytesIO
 
 
 def login(request):
+    with open("/Users/huanghanhua/PycharmProjects/analyze_lianjia_Django/funtinos/rsa.public.pem", mode="r") as f:
+        pub_key = f.read()      #公钥
     if request.method=="GET":
         form = Login()
-        return render(request,"login.html",{"form":form})
-
-    form = Login(data=request.POST)
+        return render(request,"login.html",{"form":form,"pub_key":pub_key}) #get请求进入登录页
+    # print(pub_key)
+    form = Login(data=request.POST)     #获取post请求中的信息
     if form.is_valid():
         user_input_code = form.cleaned_data.pop("code")
         code = request.session.get("image_code","")#可能因为过时没有了所以获取时候为none这里设置让他为""
-
         if code.upper() != user_input_code.upper():
             form.add_error("code","验证码输入不正确")
-            return render(request, "login.html", {"form": form})
-
+            return render(request, "login.html", {"form": form,"pub_key":pub_key})
         admin_obj = models.Admin.objects.filter(**form.cleaned_data).first()
         if not admin_obj:
             form.add_error("password","用户名或者密码不正确")
-            return render(request, "login.html", {"form": form})
+            return render(request, "login.html", {"form": form,"pub_key":pub_key})
         pl = models.Admin.objects.filter(admin_user=admin_obj.admin_user).first().plce
         request.session["info"] = {"id":admin_obj.id,"name":admin_obj.admin_user,"plce":pl}
         #session设置了保留7天
         request.session.set_expiry(60*60*24*7)
         return redirect("/main/home/")
-    return render(request, "login.html", {"form": form})
+
+    return render(request, "login.html", {"form": form,"pub_key":pub_key})
 
 
 

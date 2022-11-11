@@ -10,7 +10,6 @@ def admin_list(request):
     if search_data:
         data_dict["admin_user__contains"]=search_data
 
-
     queryset = models.Admin.objects.filter(**data_dict)
     page_object = Pagination(request,queryset,page_size=3,plus=2,)
 
